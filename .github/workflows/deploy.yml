@@ -34,9 +34,10 @@ jobs:
     needs: job1
 
     steps:
-
-      - name: 🚚 Get latest code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7
 
       - uses: actions/cache@v2
         with:
@@ -48,6 +49,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '14'
+          cache: 'pnpm'
 
       - name: 🙈 Create Env File
         run: |
@@ -61,9 +63,11 @@ jobs:
           echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
           echo USER_PASSWORD_SECRET=${{ secrets.USER_PASSWORD_SECRET }} >> .env
 
+      - name: Install dependencies
+        run: pnpm install
+
       - name: 🔨 Build Project
         run: |
-          npm ci
           npm run build
 
       - name: 📂 Sync files
