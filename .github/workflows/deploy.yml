@@ -1,0 +1,88 @@
+on:
+  push:
+    branches:
+      - master
+      - alpha
+
+name: 🚀 Deploy nestjs on push
+jobs:
+  job1:
+    name: 🐸 compute-env-name
+    runs-on: ubuntu-latest
+    outputs:
+      env_name: ${{ steps.step1.outputs.env_name }}
+    steps:
+      - name: get env name
+        id: step1
+        run: |
+          branch_name=${refs: 11}
+          if [ "$branch_name" = "master" ]; then
+            env_name="production"
+          else
+            env_name=$branch_name
+          fi
+          echo "环境：${env_name}"
+          echo "::set-output name=env_name::$env_name"
+
+        env:
+          refs: ${{github.ref}}
+
+  nestjs-deploy:
+    name: 🎉 【${{ needs.job1.outputs.env_name }}】Deploy
+    runs-on: ubuntu-latest
+    environment: ${{ needs.job1.outputs.env_name }}
+    needs: job1
+
+    steps:
+
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: Use Node.js 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: 🙈 Create Env File
+        run: |
+          touch .env
+          echo API_PORT=${{ secrets.API_PORT }} >> .env
+          echo TYPEORM_USERNAME=${{ secrets.TYPEORM_USERNAME }} >> .env
+          echo TYPEORM_PASSWORD=${{ secrets.TYPEORM_PASSWORD }} >> .env
+          echo TYPEORM_HOST=${{ secrets.TYPEORM_HOST }} >> .env
+          echo TYPEORM_PORT=${{ secrets.TYPEORM_PORT }} >> .env
+          echo TYPEORM_DATABASE=${{ secrets.TYPEORM_DATABASE }} >> .env
+          echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
+          echo USER_PASSWORD_SECRET=${{ secrets.USER_PASSWORD_SECRET }} >> .env
+
+      - name: 🔨 Build Project
+        run: |
+          npm ci
+          npm run build
+
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.2.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/src/**
+            **/test/**
+            package-lock.json
+            pnpm-lock.yaml
+            .eslintrc.js
+            .gitignore
+            .prettierrc
+            .README.md
+            .tsconfig.build.json
+            .tsconfig.json
