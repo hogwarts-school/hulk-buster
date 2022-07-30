@@ -4,6 +4,8 @@ WORKDIR /usr/src/app
 
 COPY yarn.lock ./
 
+RUN yarn global add rimraf
+
 RUN yarn
 
 COPY . .
