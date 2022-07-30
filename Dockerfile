@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm intall yarn -g
+RUN npm install yarn --location=global
 
 RUN yarn
 
