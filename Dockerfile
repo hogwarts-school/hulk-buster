@@ -10,6 +10,12 @@ RUN yarn
 
 COPY . .
 
+<<<<<<< HEAD
+=======
+RUN npm run build \
+    && npm prune --production
+
+>>>>>>> d71de25 (chore: add dockerfile)
 EXPOSE 3000
 
 CMD ["node", "dist/main.js"]
