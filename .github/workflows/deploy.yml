@@ -66,24 +66,13 @@ jobs:
           npm ci
           npm run build
 
-
       - name: 📂 Sync files
-        uses: SamKirkland/FTP-Deploy-Action@4.2.0
+        uses: burnett01/rsync-deployments@5.2
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/src/**
-            **/test/**
-            package-lock.json
-            pnpm-lock.yaml
-            .eslintrc.js
-            .gitignore
-            .prettierrc
-            .README.md
-            .tsconfig.build.json
-            .tsconfig.json
+          switches: -avzr --delete
+          path: ./dist .dockerignore Dockerfile ormconfig.js package-lock.json package.json
+          remote_path: ${{ secrets.DEPLOY_PATH }}
+          remote_host: ${{ secrets.DEPLOY_HOST }}
+          remote_port: ${{ secrets.DEPLOY_PORT }}
+          remote_user: ${{ secrets.DEPLOY_USER }}
+          remote_key: ${{ secrets.DEPLOY_KEY }}
