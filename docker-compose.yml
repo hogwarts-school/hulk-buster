@@ -1,7 +1,8 @@
 version: "3"
 services:
   hulk-buster-a:
-    build: .
+    image: hulk-buster-a
+    build: ./
     container_name: hulk-buster-a
     ports:
       - "3000:3000"
@@ -28,6 +29,11 @@ services:
     restart: always
     networks:
       - net-alpha
+    volumes:
+      - /dockerData/mysql-alpha/data:/var/lib/mysql
+      - /dockerData/mysql-alpha/conf:/etc/mysql
+      - /dockerData/mysql-alpha/log:/var/log/mysql
+
 
 networks:
   net-alpha:
