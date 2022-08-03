@@ -1,0 +1,36 @@
+version: "3"
+services:
+  hulk-buster-a:
+    build: .
+    container_name: hulk-buster-a
+    ports:
+      - "3000:3000"
+    restart: always
+    networks:
+      - net-alpha
+    command: node dist/main.js
+
+  nginx-alpha:
+    image: nginx:latest
+    container_name: nginx-alpha
+    ports:
+      - "3000:3000"
+    restart: always
+    networks:
+      - net-alpha
+
+
+  mysql-alpha:
+    image: mysql:latest
+    container_name: mysql-alpha
+    ports:
+      - "3306:3306"
+    restart: always
+    networks:
+      - net-alpha
+
+networks:
+  net-alpha:
+    driver: bridge
+
+
