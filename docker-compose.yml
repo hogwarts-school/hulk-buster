@@ -34,10 +34,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
-      - /dockerData/mysql-alpha/data:/var/lib/mysql
-      - /dockerData/mysql-alpha/conf:/etc/mysql
-      - /dockerData/mysql-alpha/log:/var/log/mysql
-
+      - /app-share/mysql-alpha:/var/lib/mysql
 
 
 networks:
