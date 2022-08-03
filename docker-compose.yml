@@ -19,6 +19,8 @@ services:
     restart: always
     networks:
       - net-alpha
+    volumes:
+      - /app-share/nginx-alpha:/etc/nginx
 
 
   mysql-alpha:
