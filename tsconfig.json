@@ -18,6 +18,9 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
+      "@app-config/*": [
+        "src/common/app-config/*"
+      ],
       "@common/*": [
         "src/common/*"
       ],

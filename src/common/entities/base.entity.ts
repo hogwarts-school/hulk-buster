@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class UserAbstractEntity {
+export class AbstractEntity {
   @PrimaryGeneratedColumn()
   @Index()
   id: number;

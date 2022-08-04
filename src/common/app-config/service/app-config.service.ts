@@ -8,8 +8,11 @@ import * as CryptoJs from 'crypto-js';
 class AppConfigService {
   constructor(private readonly configService: ConfigService) {}
 
-  get port() {
-    return Number(this.configService.get<number>('PORT'));
+  get apiConfig() {
+    return {
+      port: Number(this.configService.get<number>('API_PORT')),
+      prefix: this.configService.get<string>('API_PREFIX'),
+    };
   }
 
   get dbConfig(): MysqlConnectionOptions {
