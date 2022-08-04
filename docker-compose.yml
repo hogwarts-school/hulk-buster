@@ -39,6 +39,7 @@ services:
 
 networks:
   net-alpha:
+    name: net-alpha
     driver: bridge
 
 
