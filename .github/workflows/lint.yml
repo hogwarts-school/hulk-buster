@@ -9,6 +9,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
 
+      - uses: actions/cache@v2
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+
       - name: Install
         run: |
           npm install
