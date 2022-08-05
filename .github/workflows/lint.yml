@@ -1,0 +1,26 @@
+name: Lint nestjs on push
+
+on: push
+
+jobs:
+  Lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Install
+        run: |
+          npm install
+      - name: Lint
+        run: |
+          npm run lint
+      - name: Test
+        run: |
+          npm run test -- --watchAll=false
+      - name: Build
+        run: |
+         npm run build
+      - name: Deploy
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/alpha')
+        run: echo "要构建镜像了"
